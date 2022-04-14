@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "905263267212",
+    "firebase_url": "https://squash-8089f-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "squash-8089f",
+    "storage_bucket": "squash-8089f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905263267212:android:5ed74ff1fe7e689fc72aa9",
+        "android_client_info": {
+          "package_name": "com.example.squash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905263267212-n4dasop6jbemf3aqsjvk8p47e7dqhk8s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.squash",
+            "certificate_hash": "16f9e55555ed0190fabad153243d8fce0a3985c4"
+          }
+        },
+        {
+          "client_id": "905263267212-g0opq912dp92aeq0u0ndalmsok77koek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUO6yeO8RKM0oQjzyES_uq-ns0olqD1Bk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905263267212-g0opq912dp92aeq0u0ndalmsok77koek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
