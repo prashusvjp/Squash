@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 public class LoginActivity extends AppCompatActivity {
     TextView newUserTxt;
@@ -79,9 +81,18 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(new Intent(LoginActivity.this, NavigationActivity.class)
                                 .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                             }else{
-                                Toast.makeText(LoginActivity.this,
-                                        "Sorry, something went wrong. Please try again later.",
-                                        Toast.LENGTH_SHORT).show();
+                                try{
+                                    throw task.getException();
+                                }catch (FirebaseAuthInvalidUserException ivalidEmail){
+                                    emailEditTxt.setError("User doesn't exists");
+                                    emailEditTxt.requestFocus();
+                                }catch (FirebaseAuthInvalidCredentialsException invalidCredentialsException){
+                                    passwordEditTxt.setError("Invalid username/password");
+                                    passwordEditTxt.requestFocus();
+                                }catch (Exception e){
+                                    Toast.makeText(LoginActivity.this,
+                                            "Sorry! Something went wrong, Please try again later.", Toast.LENGTH_SHORT).show();
+                                }
                             }
                        }
                    });
