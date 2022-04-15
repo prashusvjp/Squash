@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
 
     <TextView
         android:id="@+id/loginTxtView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login to Squash"
+        android:text="Sign up to Squash"
         android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginTop="100dp"
@@ -54,44 +54,24 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/signUpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Sign up"
         android:textColor="@color/white"
         android:fontFamily="@font/ubuntu"
         android:textStyle="bold"
-        android:layout_below="@id/newUserLayout"
+        android:layout_below="@id/passwordInputLayout"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:background="@drawable/rounded_button"/>
 
-    <LinearLayout
-        android:id="@+id/newUserLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignEnd="@id/passwordInputLayout"
-        android:layout_below="@id/passwordInputLayout">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New User?" />
-        <TextView
-            android:id="@+id/newUserTxtView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Click here"
-            android:textStyle="bold"
-            android:textColor="@color/purple_700"/>
-    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:background="@android:color/darker_gray"
-        android:layout_below="@id/loginButton"/>
+        android:layout_below="@id/signUpButton"/>
 
 </RelativeLayout>
