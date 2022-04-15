@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
 
 public class RegisterActivity extends AppCompatActivity {
     TextInputEditText emailEditTxt, passwordEditTxt;
@@ -54,6 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                     emailEditTxt.setError("Enter a valid email ID");
                     emailEditTxt.requestFocus();
+                }else if(doesUserExists(email)) {
+                    emailEditTxt.setError("User already exists");
+                    emailEditTxt.requestFocus();
                 }else if(TextUtils.isEmpty(password)){
                     passwordEditTxt.setError("Password cannot be empty");
                     emailEditTxt.requestFocus();
@@ -78,6 +82,17 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
 
+        private boolean doesUserExists(String email) {
+            final boolean[] result = {true};
+            FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                            result[0] = task.getResult().getSignInMethods().isEmpty();
+                        }
+                    });
+            return !result[0];
+        }
 
     }
 
