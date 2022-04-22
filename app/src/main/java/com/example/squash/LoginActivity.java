@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                if(TextUtils.isEmpty(email)){
                    emailEditTxt.setError("Email cannot be empty");
                    emailEditTxt.requestFocus();
-               }else if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+               }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                    emailEditTxt.setError("Enter a valid email ID");
                    emailEditTxt.requestFocus();
                }else if(TextUtils.isEmpty(password)){

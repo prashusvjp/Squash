@@ -52,8 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(email)){
                     emailEditTxt.setError("Email cannot be empty");
                     emailEditTxt.requestFocus();
-                }else if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    emailEditTxt.setError("Enter a valid email ID");
+                }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    emailEditTxt.setError("Enter a valid email id");
                     emailEditTxt.requestFocus();
                 }else if(doesUserExists(email)) {
                     emailEditTxt.setError("User already exists");
