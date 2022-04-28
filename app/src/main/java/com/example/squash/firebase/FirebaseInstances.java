@@ -28,19 +28,4 @@ public class FirebaseInstances {
         return getAuthInstance().getCurrentUser().getEmail();
     }
 
-    public static DataSnapshot getDataFromDB(String path){
-        final DataSnapshot[] dataSnapshot = {null};
-        getDataBaseReference(path).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                dataSnapshot[0]=snapshot;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        return dataSnapshot[0];
-    }
 }

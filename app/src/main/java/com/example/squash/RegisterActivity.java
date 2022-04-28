@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
 
 public class RegisterActivity extends AppCompatActivity {
-    TextInputEditText emailEditTxt, passwordEditTxt;
+    TextInputEditText emailEditTxt, passwordEditTxt,confPasswordEditTxt;
     Button registerBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         emailEditTxt = findViewById(R.id.emailEditTxt);
         passwordEditTxt = findViewById(R.id.passwordEditTxt);
         registerBtn = findViewById(R.id.signUpButton);
+        confPasswordEditTxt = findViewById(R.id.confPasswordEditTxt);
     }
 
     class RegisterEvents{
@@ -48,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = emailEditTxt.getText().toString();
                 String password = passwordEditTxt.getText().toString();
-
+                String confPassword = confPasswordEditTxt.getText().toString();
                 if(TextUtils.isEmpty(email)){
                     emailEditTxt.setError("Email cannot be empty");
                     emailEditTxt.requestFocus();
@@ -60,7 +61,10 @@ public class RegisterActivity extends AppCompatActivity {
                     emailEditTxt.requestFocus();
                 }else if(TextUtils.isEmpty(password)){
                     passwordEditTxt.setError("Password cannot be empty");
-                    emailEditTxt.requestFocus();
+                    passwordEditTxt.requestFocus();
+                }else if(!confPassword.equals(password)) {
+                    confPasswordEditTxt.setError("Passwords do not match");
+                    confPasswordEditTxt.requestFocus();
                 }else{
                     FirebaseAuth mAuth= FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(email, password)

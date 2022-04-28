@@ -10,18 +10,21 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.squash.firebase.FirebaseInstances;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 
 public class ProfileFragment extends Fragment {
     TextView emailTxtView, userNameTxtView, logoutTxtView;
-    RoundedImageView shareImgView;
+    ImageView shareImgView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,15 +69,25 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setData() {
-        DataSnapshot snapshot = FirebaseInstances.getDataFromDB("Users/"+FirebaseInstances.getUid());
-        if(snapshot.exists()){
-            String email = emailTxtView.getText().toString() + FirebaseInstances.getEmail();
-            String name = userNameTxtView.getText().toString() +
-                    snapshot.child("firstName").getValue().toString() + " " +
-                    snapshot.child("lastName").getValue().toString();
-            emailTxtView.setText(email);
-            userNameTxtView.setText(name);
-        }
+        FirebaseInstances.getDataBaseReference("Users/"+FirebaseInstances.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            String email = emailTxtView.getText().toString() + FirebaseInstances.getEmail();
+                            String name = userNameTxtView.getText().toString() +
+                                    snapshot.child("firstName").getValue().toString() + " " +
+                                    snapshot.child("lastName").getValue().toString();
+                            emailTxtView.setText(email);
+                            userNameTxtView.setText(name);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     @Override
