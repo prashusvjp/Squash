@@ -24,6 +24,10 @@ public class FirebaseInstances {
         return getAuthInstance().getCurrentUser().getUid();
     }
 
+    public static String getEmail(){
+        return getAuthInstance().getCurrentUser().getEmail();
+    }
+
     public static DataSnapshot getDataFromDB(String path){
         final DataSnapshot[] dataSnapshot = {null};
         getDataBaseReference(path).addListenerForSingleValueEvent(new ValueEventListener() {

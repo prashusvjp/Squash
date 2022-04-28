@@ -53,6 +53,23 @@
             android:backgroundTint="@android:color/transparent"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confPasswordInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordInputLayout"
+        android:layout_margin="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="Re-enter Password">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confPasswordEditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:backgroundTint="@android:color/transparent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/signUpButton"
         android:layout_width="match_parent"
@@ -61,7 +78,7 @@
         android:textColor="@color/white"
         android:fontFamily="@font/ubuntu"
         android:textStyle="bold"
-        android:layout_below="@id/passwordInputLayout"
+        android:layout_below="@id/confPasswordInputLayout"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"

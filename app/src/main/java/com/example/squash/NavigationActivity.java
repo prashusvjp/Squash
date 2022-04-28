@@ -11,41 +11,50 @@ import android.widget.FrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class NavigationActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
+public class NavigationActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     FrameLayout container;
     Fragment homeFragment, filesFragment, profileFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        container = findViewById(R.id.container);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnItemSelectedListener(this);
-        //bottomNavigationView.setSelectedItemId(R.id.home);
-
-        homeFragment = new HomeFragment();
-        filesFragment = new FilesFragment();
-        profileFragment = new ProfileFragment();
-
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-                return true;
-
-            case R.id.files:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, filesFragment).commit();
-                return true;
-
-            case R.id.profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
-                return true;
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
         }
 
-        return false;
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(navigationItemSelectedListener);
+        bottomNavigationView.setSelectedItemId(R.id.home);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, new HomeFragment())
+                .commit();
     }
+
+    private NavigationBarView.OnItemSelectedListener navigationItemSelectedListener = new NavigationBarView.OnItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment = null;
+            switch (item.getItemId()) {
+                case R.id.home:
+                    selectedFragment = new HomeFragment();
+                    break;
+                case R.id.files:
+                    selectedFragment = new FilesFragment();
+                    break;
+                case R.id.profile:
+                    selectedFragment = new ProfileFragment();
+                    break;
+
+            }
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, selectedFragment)
+                    .commit();
+            return true;
+        }
+    };
 }
