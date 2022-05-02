@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.squash.firebase.FirebaseInstances;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,8 +50,11 @@ public class ProfileFragment extends Fragment {
         logoutTxtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(), "Logout Successful", Toast.LENGTH_SHORT).show();
                 FirebaseInstances.getAuthInstance().signOut();
-                startActivity(new Intent(getContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                startActivity(new Intent(getContext(), LoginActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|
+                                Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
@@ -93,5 +97,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

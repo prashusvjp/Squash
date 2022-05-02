@@ -55,12 +55,14 @@ public class AddUserActivity extends AppCompatActivity {
                            if(task.isSuccessful()){
                                Toast.makeText(AddUserActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
                                startActivity(new Intent(AddUserActivity.this,NavigationActivity.class)
-                                       .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                                       .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|
+                                               Intent.FLAG_ACTIVITY_NEW_TASK));
                            }else{
                                Toast.makeText(AddUserActivity.this, "Sorry, something went wrong, please try again later!", Toast.LENGTH_SHORT).show();
                                FirebaseInstances.getAuthInstance().getCurrentUser().delete();
                                startActivity(new Intent(AddUserActivity.this,RegisterActivity.class)
-                                       .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                                       .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|
+                                               Intent.FLAG_ACTIVITY_NEW_TASK));
                            }
                        }
                    });

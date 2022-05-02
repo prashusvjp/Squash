@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/drawable/add_icon.xml" value="0.1245" />
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/drawable/home_icon.xml" value="0.1" />
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/drawable/log_out_bg.xml" value="0.2155" />
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/drawable/rounded_button.xml" value="0.1" />
@@ -14,7 +15,7 @@
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/layout/activity_register.xml" value="0.234375" />
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/layout/file_display.xml" value="0.264" />
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/layout/fragment_files.xml" value="0.234375" />
-        <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/layout/fragment_home.xml" value="0.234375" />
+        <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/Workspace/Exps/Squash/app/src/main/res/menu/bottom_nav_menu.xml" value="0.234375" />
       </map>

@@ -25,12 +25,17 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if(FirebaseAuth.getInstance().getCurrentUser() != null){
                     startActivity(new Intent(MainActivity.this, NavigationActivity.class)
-                            .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|
+                                    Intent.FLAG_ACTIVITY_NEW_TASK));
+                    finish();
                 }else{
                     startActivity(new Intent(MainActivity.this, LoginActivity.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|
+                            Intent.FLAG_ACTIVITY_NEW_TASK));
+                    finish();
                 }
             }
         },3000);
     }
+
 }

@@ -79,7 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                                         "Login successful",
                                         Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this, NavigationActivity.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|
+                                        Intent.FLAG_ACTIVITY_NEW_TASK));
                             }else{
                                 try{
                                     throw task.getException();

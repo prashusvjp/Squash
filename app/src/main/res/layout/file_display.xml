@@ -4,7 +4,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:id="@+id/filesLayout"
     android:orientation="horizontal">
 
     <CheckBox
@@ -17,6 +20,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="5dp"
+        android:elevation="5dp"
         app:cardCornerRadius="10dp">
 
         <LinearLayout
@@ -36,10 +41,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_gravity="center"
                 android:layout_margin="10dp">
                 <TextView
-                    android:id="@+id/fileNameTxt"
+                    android:id="@+id/fileNameTxtView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
@@ -47,25 +52,6 @@
                     android:textColor="@color/black"
                     android:text="File name:"/>
 
-                <TextView
-                    android:id="@+id/uploadDateTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/fileNameTxt"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/ubuntu"
-                    android:textColor="@color/black"
-                    android:text="Date:"/>
-
-                <TextView
-                    android:id="@+id/compressedSize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/uploadDateTxt"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/ubuntu"
-                    android:textColor="@color/black"
-                    android:text="File size:"/>
 
             </RelativeLayout>
 

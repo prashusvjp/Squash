@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".HomeFragment">
 
     <TextView
+        android:id="@+id/homeTxtView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
@@ -15,12 +17,166 @@
         android:fontFamily="@font/ubuntu"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginBottom="10dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/filesRecyclerView"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/decodeFileCardView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        app:cardElevation="5dp"
+        android:elevation="5dp"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@id/homeTxtView">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:text="Get files from URL"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/getFileInputLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Paste the link to download the file">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/getFileEditTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:backgroundTint="@android:color/transparent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/getFileBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GET"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"/>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/uploadsCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="5dp"
+        android:elevation="5dp"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@id/decodeFileCardView">
+
+        <RelativeLayout
+            android:id="@+id/uploadsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_below="@id/decodeFileCardView">
+
+            <TextView
+                android:id="@+id/statusTxtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Uploads"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/noOfFilesTxtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/statusTxtView"
+                android:layout_alignParentRight="true"
+                android:text="1/1"
+                android:textSize="17sp"/>
+
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/noOfFilesTxtView"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100"
+
+                android:progress="45"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/uploadsCardView">
+
+        <TextView
+            android:id="@+id/recentsTxtView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Recent files"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:id="@+id/noFilesFoundLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recentsTxtView"
+            android:layout_marginTop="50dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/no_results"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="#888888"
+                    android:text="Sorry, no files found"/>
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/filesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recentsTxtView" />
+
+    </RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addFileFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/add_icon"
+        android:backgroundTint="@color/purple_200"
+        android:layout_margin="20dp"/>
+
+</RelativeLayout>
