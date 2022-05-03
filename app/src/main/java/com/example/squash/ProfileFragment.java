@@ -15,12 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.squash.firebase.FirebaseInstances;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.makeramen.roundedimageview.RoundedImageView;
 
 
 public class ProfileFragment extends Fragment {
@@ -73,7 +70,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setData() {
-        FirebaseInstances.getDataBaseReference("Users/"+FirebaseInstances.getUid())
+        FirebaseInstances.getDatabaseReference("Users/"+FirebaseInstances.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

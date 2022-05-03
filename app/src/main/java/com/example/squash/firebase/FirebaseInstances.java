@@ -14,8 +14,12 @@ import com.google.firebase.storage.StorageReference;
 public class FirebaseInstances {
     static FirebaseDatabase database = FirebaseDatabase
             .getInstance("https://squash-8089f-default-rtdb.asia-southeast1.firebasedatabase.app/");
-    public static DatabaseReference getDataBaseReference(String path){
+    public static DatabaseReference getDatabaseReference(String path){
         return database.getReference(path);
+    }
+
+    public static DatabaseReference getDatabaseReferenceFromURL(String url) throws Exception{
+        return database.getReferenceFromUrl(url);
     }
 
     public static FirebaseAuth getAuthInstance(){
@@ -32,5 +36,9 @@ public class FirebaseInstances {
 
     public static StorageReference getStorageReference(){
         return FirebaseStorage.getInstance().getReference();
+    }
+
+    public static StorageReference getStorageReferenceFromURL(String url){
+        return FirebaseStorage.getInstance().getReferenceFromUrl(url);
     }
 }
