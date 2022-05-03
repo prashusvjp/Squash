@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class FilesFragment extends Fragment {
-    ArrayList<Files> fileDataArrayList = new ArrayList<Files>();
+    ArrayList<Files> fileDataArrayList;
     LinearLayout noFilesFoundLayout;
     RecyclerView filesRecyclerView;
     FileAdapters fileAdapters;
@@ -49,24 +49,30 @@ public class FilesFragment extends Fragment {
     }
 
     private void getData() {
-        FirebaseInstances.getDataBaseReference("Users/"+FirebaseInstances.getUid()+"/Files")
+        FirebaseInstances.getDatabaseReference("Users/"+FirebaseInstances.getUid()+"/Files")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()) {
+                            fileDataArrayList = new ArrayList<>();
                             noFilesFoundLayout.setVisibility(View.GONE);
+                            filesRecyclerView.setVisibility(View.VISIBLE);
                             for (DataSnapshot i : snapshot.getChildren()) {
                                 fileDataArrayList.add(0,new Files(
+                                        i.getKey(),
                                         i.child("url1").getValue().toString(),
                                         i.child("url2").getValue().toString(),
                                         i.child("fileName").getValue().toString()
                                 ));
                             }
+
                             fileAdapters = new FileAdapters(fileDataArrayList,getActivity());
                             filesRecyclerView.setAdapter(fileAdapters);
                             filesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        }else
+                        }else {
+                            filesRecyclerView.setVisibility(View.GONE);
                             noFilesFoundLayout.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override

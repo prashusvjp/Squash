@@ -3,6 +3,8 @@ package com.example.squash.models.encode_decode;
 import android.content.Context;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Environment;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -76,7 +78,7 @@ public class Huffman {
 
     public void encodeFile(Uri uri) throws FileNotFoundException, IOException {
         readInputFromFile(uri);
-        Toast.makeText(context, "finised reading", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "finised reading", Toast.LENGTH_SHORT).show();
         int n = charArray.size();
         PriorityQueue<HuffmanNode> q = new PriorityQueue<HuffmanNode>(n, new ImplementComparator());
 
@@ -114,10 +116,10 @@ public class Huffman {
         }
 
         writeCharBinPairs(root, "mappings.txt");
-        Toast.makeText(context, "finised mapping.txt", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "mapping.txt generated", Toast.LENGTH_SHORT).show();
         printCode(root, "");
         createAndWriteEncodedString("encoded.txt");
-        Toast.makeText(context, "finised encoded.txt", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "encoded.txt generated", Toast.LENGTH_SHORT).show();
 
         //decodeFile("./encoded.txt", "./mappings.txt");
     }
@@ -143,8 +145,13 @@ public class Huffman {
     }
 
     public void writeToFile(String filename, String data, boolean writetoBinary) throws IOException {
+        File file;
+        if(writetoBinary){
+            file = new File(context.getFilesDir(),filename);
+        }else{
+            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),filename);
+        }
 
-        File file = new File(context.getFilesDir(),filename);
         BufferedWriter bf = null;
 
         try {
@@ -155,6 +162,8 @@ public class Huffman {
             e.printStackTrace();
         } finally {
             try {
+                if(writetoBinary)
+                    Toast.makeText(context, "File downloaded to your downloads folder", Toast.LENGTH_SHORT).show();
                 bf.close();
             } catch (Exception e) {
             }
@@ -192,11 +201,11 @@ public class Huffman {
     }
 
 
-    public void decodeFile(String binfilename, String mappingfname) throws FileNotFoundException, IOException {
+    public void decodeFile(File binfilename, File mappingfname, String fileName) throws FileNotFoundException, IOException {
 
         /* Constructing HMapReverse using info from mappings.txt */
-        File file = new File(mappingfname);
-        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        BufferedReader br = new BufferedReader(new FileReader(mappingfname));
         Map<String, Character> HmapReverse = new HashMap<String, Character>();
 
         String str;
@@ -219,9 +228,10 @@ public class Huffman {
 
         String binStr = "";
 
-        br = new BufferedReader((new FileReader(new File(binfilename))));
+        br = new BufferedReader((new FileReader(binfilename)));
         int padding = Character.getNumericValue((char) br.read());
         int c = 0;
+        c=br.read();
 
         while (c != -1) {
             Character ch = (char) c;
@@ -250,7 +260,7 @@ public class Huffman {
             c = c2nd;
         }
 
-        writeToFile("./decodedFile.txt", decodedString, false);
+        writeToFile(fileName, decodedString, false);
     }
 
     public static String getAsciiBinString(Character input) {

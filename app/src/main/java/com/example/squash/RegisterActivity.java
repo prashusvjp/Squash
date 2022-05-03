@@ -62,6 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if(TextUtils.isEmpty(password)){
                     passwordEditTxt.setError("Password cannot be empty");
                     passwordEditTxt.requestFocus();
+                }else if(password.length() < 8){
+                    passwordEditTxt.setError("Password should have more than 8 characters");
+                    passwordEditTxt.requestFocus();
                 }else if(!confPassword.equals(password)) {
                     confPasswordEditTxt.setError("Passwords do not match");
                     confPasswordEditTxt.requestFocus();

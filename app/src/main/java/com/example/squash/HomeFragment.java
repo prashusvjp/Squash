@@ -25,8 +25,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.squash.firebase.FirebaseInstances;
@@ -41,6 +41,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -55,14 +56,15 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
     FloatingActionButton addFileFAB;
-    TextInputEditText getFileEdtTxt;
+    TextInputEditText getFileEdtTxt,passcodeEdtTxt;
     Button getFileBtn;
     String getFileTxt;
     LinearLayout noFilesFoundLayout;
-    ArrayList<Files> fileDataArrayList = new ArrayList<Files>();
+    ArrayList<Files> fileDataArrayList;
     RecyclerView filesRecyclerView;
     FileAdapters fileAdapters;
     Files files;
+    ProgressBar progressBar;
     Uri uri;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,8 @@ public class HomeFragment extends Fragment {
         getFileEdtTxt = view.findViewById(R.id.getFileEditTxt);
         noFilesFoundLayout = view.findViewById(R.id.noFilesFoundLayout);
         filesRecyclerView = view.findViewById(R.id.filesRecyclerView);
+        passcodeEdtTxt=view.findViewById(R.id.passcodeEdtTxt);
+        progressBar = view.findViewById(R.id.progressBar);
         getData();
         getFileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +98,11 @@ public class HomeFragment extends Fragment {
                     getFileEdtTxt.setError("Field should not be empty");
                     getFileEdtTxt.requestFocus();
                 }else{
-                    getFiles();
+                    getFileBtn.setEnabled(false);
+                    getFileBtn.requestFocus();
+                    progressBar.setVisibility(View.VISIBLE);
+                    authenticate(getFileTxt);
+                    getFileBtn.setEnabled(true);
                 }
             }
         });
@@ -116,7 +124,81 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void getFiles() {
+    private void authenticate(String getFileTxt) {
+        Files files = new Files(getActivity());
+        try {
+            FirebaseInstances.getDatabaseReferenceFromURL(getFileTxt)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                files.fileName = snapshot.child("fileName").getValue().toString();
+                                StorageReference storageReference= FirebaseInstances
+                                        .getStorageReferenceFromURL(snapshot.child("url1").getValue().toString());
+                                storageReference.getMetadata().addOnCompleteListener(new OnCompleteListener<StorageMetadata>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<StorageMetadata> task) {
+                                        if (task.isSuccessful()) {
+                                            files.password = task.getResult().getCustomMetadata("passcode");
+                                            if (files.password.equals(passcodeEdtTxt.getText().toString())) {
+                                                getFiles(getFileTxt, snapshot, files);
+                                            } else {
+                                                progressBar.setVisibility(View.GONE);
+                                                passcodeEdtTxt.setText("");
+                                                passcodeEdtTxt.setError("Incorrect passcode");
+                                                passcodeEdtTxt.requestFocus();
+                                            }
+                                        }
+                                    }
+                                });
+                            }else{
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(),
+                                        "Sorry, File Not Found , Please try contacting the owner of the file",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+        } catch (Exception e) {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getActivity(), "Invalid URL", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void getFiles(String getFileTxt,DataSnapshot snapshot,Files files) {
+        StorageReference storageReference= FirebaseInstances
+                .getStorageReferenceFromURL(snapshot.child("url1").getValue().toString());
+        storageReference
+                .getFile(files.encodedFile).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+                    FirebaseInstances
+                            .getStorageReferenceFromURL(snapshot.child("url2").getValue().toString())
+                            .getFile(files.binFile).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                            Huffman decode = new Huffman(getActivity());
+                            try {
+                                decode.decodeFile(files.encodedFile,files.binFile,files.fileName);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }finally {
+                                getFileEdtTxt.setText("");
+                                passcodeEdtTxt.setText("");
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                }
+            }
+        });
 
     }
 
@@ -218,7 +300,7 @@ public class HomeFragment extends Fragment {
                 this.url2 = url2;
             }
         }
-        FirebaseInstances.getDataBaseReference("Users/" + FirebaseInstances.getUid())
+        FirebaseInstances.getDatabaseReference("Users/" + FirebaseInstances.getUid())
                 .child("Files").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -228,7 +310,7 @@ public class HomeFragment extends Fragment {
                         key = Integer.parseInt(ds.getKey()) +1;
                     }
                 }
-                FirebaseInstances.getDataBaseReference("Users/" + FirebaseInstances.getUid())
+                FirebaseInstances.getDatabaseReference("Users/" + FirebaseInstances.getUid())
                         .child("Files/"+key).setValue(new Data(url1,url2,fileName));
             }
 
@@ -341,15 +423,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void getData() {
-        FirebaseInstances.getDataBaseReference("Users/"+FirebaseInstances.getUid()+"/Files")
+        FirebaseInstances.getDatabaseReference("Users/"+FirebaseInstances.getUid()+"/Files")
                 .limitToLast(3)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()) {
+                            fileDataArrayList = new ArrayList<>();
                             noFilesFoundLayout.setVisibility(View.GONE);
+                            filesRecyclerView.setVisibility(View.VISIBLE);
                             for (DataSnapshot i : snapshot.getChildren()) {
                                 fileDataArrayList.add(0,new Files(
+                                        i.getKey(),
                                         i.child("url1").getValue().toString(),
                                         i.child("url2").getValue().toString(),
                                         i.child("fileName").getValue().toString()
@@ -359,8 +444,10 @@ public class HomeFragment extends Fragment {
                             fileAdapters = new FileAdapters(fileDataArrayList,getActivity());
                             filesRecyclerView.setAdapter(fileAdapters);
                             filesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        }else
+                        }else {
+                            filesRecyclerView.setVisibility(View.GONE);
                             noFilesFoundLayout.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override

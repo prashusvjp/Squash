@@ -15,7 +15,6 @@ import com.example.squash.models.UserData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class AddUserActivity extends AppCompatActivity {
     TextInputEditText fnameETxt, lnameETxt;
@@ -46,7 +45,7 @@ public class AddUserActivity extends AppCompatActivity {
                    fnameETxt.setError("Field cannot be empty");
                    fnameETxt.requestFocus();
                }else {
-                   FirebaseInstances.getDataBaseReference("Users")
+                   FirebaseInstances.getDatabaseReference("Users")
                            .child(FirebaseInstances.getUid())
                            .setValue(new UserData(fname,lname))
                            .addOnCompleteListener(new OnCompleteListener<Void>() {
